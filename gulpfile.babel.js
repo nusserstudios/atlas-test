@@ -45,11 +45,11 @@ gulp.task('init-watch', () => {
 })
 
 gulp.task('build', () => {
-    runSequence(['sass', 'js', 'fonts', 'images', 'pub-delete', 'build-functions'], 'hugo')
+    runSequence('pub-delete', ['sass', 'js', 'fonts', 'images', 'build-functions'], 'hugo')
 })
 
 gulp.task('build-preview', () => {
-    runSequence(['sass', 'js', 'fonts', 'images', 'pub-delete', 'build-functions'], 'hugo-preview')
+    runSequence('pub-delete', ['sass', 'js', 'fonts', 'images', 'build-functions'], 'hugo-preview')
 })
 
 
@@ -57,10 +57,11 @@ gulp.task('build-functions', (cb) => {
 
     fs.readdir('./src/lambda', (err, files) => {
         if (err) {
-            throw err;
+            cb(err);
         }
         if (!files.filter(file => file.endsWith('.js')).length) {
             console.log('No Netlify functions.');
+            cb();
             return;
         }
         return spawn('netlify-lambda', ['build', 'src/lambda'], { stdio: 'inherit' }).on('close', (code) => {
