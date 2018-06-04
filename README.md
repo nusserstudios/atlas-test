@@ -48,6 +48,26 @@ A default robots.txt can be found at `/layouts/robots.txt` which is configured t
 
 The default behaviour is to disallow search engines on "branch" deployments. If you're using split testing, you will need to modify the default robots.txt template to ensure your branch deployments can be indexed.
 
+## Functions
+
+Atlas has `netlify-lambda` installed out of the box to make working with Netlify Functions that much easier. Functions should be made inside `src/lambda` and should end in the `.js` extension. They will be compiled into `/functions` where Netlify will recognise them and deploy them automatically.
+
+Here is an example that you can start from:
+
+```
+exports.handler = (event, context, callback) => {
+    callback(null, {
+        statusCode: 200,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            message: "Hi from Lambda."
+        })
+    });
+}
+```
+
 ## Headers
 
 Headers can be configured within `/layouts/index.headers`, which is then built to `/public/_headers`.
